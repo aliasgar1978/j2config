@@ -11,6 +11,8 @@ from nettoolkit import IPv4
 
 
 class Vrf():
+	"""device vrf/instances
+	"""
 	def __init__(self, table):
 		self.table = table
 
@@ -20,22 +22,33 @@ class Vrf():
 
 	@staticmethod
 	def is_vrf(data):
+		"""condition: `filter==vrf` """
 		return data['filter'].lower() == 'vrf'
 
 	def vrf_not_none(self):
+		"""condition: `vrf is not None` """
 		for key, data in self.table.items():
 			if self.is_vrf(data) and data['vrf'] != "":
 				yield data
 
 	def sorted(self):
+		"""list of available vrfs sorted by `vrf` field.
+		--> list
+		"""
 		self.sorted_vrf = sorted([ _['vrf']  for _ in self.vrf_not_none() ])
 		return  self.sorted_vrf
 
 	def sorted_vpnids(self):
+		"""list of available vrfs sorted by `vrf_vpnid` field.
+		--> list
+		"""
 		self.sorted_vpnids = sorted([ int(_['vrf_vpnid'])  for _ in self.vrf_not_none() ])
 		return self.sorted_vpnids
 
 	def sorted_vrf_data(self):
+		"""vrf data generator, sorted by vrf names
+		--> slice of data
+		"""
 		for vrf in self.sorted_vrf:
 			for data in self.vrf_not_none():
 				if data['vrf'] == vrf: 
@@ -43,6 +56,9 @@ class Vrf():
 					break
 
 	def sorted_vrf_data_by_vpnid(self):
+		"""vrf data generator, sorted by vpnids
+		--> slice of data
+		"""
 		for vpnid in self.sorted_vpnids:
 			for data in self.vrf_not_none():
 				if int(data['vrf_vpnid']) == vpnid: 
@@ -50,6 +66,9 @@ class Vrf():
 					break
 
 	def vrf_get(self, vrf):
+		"""get a particular vrf data
+		--> slice of data
+		"""
 		for data in self.vrf_not_none():
 			if data['vrf'] == vrf: 
 				yield data

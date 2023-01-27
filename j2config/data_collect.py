@@ -32,6 +32,8 @@ def to_int(item):
 
 
 class DeviceDetails():
+	""" Device details operations
+	"""
 
 	def __init__(self, global_file, device_file):
 		self.global_regional_data_file = global_file
@@ -76,7 +78,7 @@ class DeviceDetails():
 		return df_table
 
 	def get_wkl(self):
-		"""get the work location (site code) detail from device var details. 'site' field is required for the same.
+		"""get the device location detail from device var details. 'site' field is required for the same.
 		"""
 		try:
 			df_var = self.device_details 

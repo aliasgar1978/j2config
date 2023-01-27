@@ -9,6 +9,8 @@ from .general import *
 
 
 class PrepareConfig():
+	"""boiler plate code class for start configuration preparation
+	"""
 
 	# -----------------------------------------
 	# IMPORT FILTERS FOR JINJA VARIABLES
@@ -43,6 +45,8 @@ class PrepareConfig():
 		self.global_variables_file = global_variables_file
 
 	def start(self):
+		"""kicks generation
+		"""
 		# ## LOAD - DATA
 		DD = DeviceDetails(self.global_variables_file, self.data_file)
 

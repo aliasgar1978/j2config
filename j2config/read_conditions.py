@@ -6,6 +6,9 @@ import nettoolkit as nt
 
 
 def get_conditions(jinja_flie):
+	"""get all conditional statements from jinja file
+	--> dict
+	"""
 	d = {'conditions':set(), 'loops':set(), 'variables': set() }
 	with open(jinja_flie, 'r') as f:
 		lns = f.readlines()
@@ -19,6 +22,9 @@ def get_conditions(jinja_flie):
 	return d
 
 def get_variables(jinja_flie):
+	"""get all jinja variables defined in jinja file
+	--> set
+	"""
 	conds = set()
 	with open(jinja_flie, 'r') as f:
 		lns = f.readlines()
@@ -41,37 +47,5 @@ def get_variables(jinja_flie):
 			conds.add(cond)
 		# print()
 	return conds
-
-
-# # -----------------------------------------------------------------------------------------
-# #  Local Execution steps
-# # -----------------------------------------------------------------------------------------
-
-# jinja_flie = 'file.txt'
-
-# d = get_conditions(jinja_flie)
-# v = get_variables(jinja_flie)
-
-# # #########################################
-# search_var = 'dslot'
-# for x in sorted(v):
-# 	if x.find(search_var) > 1:
-# 		print(x)
-# # #########################################
-
-
-# # #########################################
-# # with open('conditions.txt', 'w') as f: 
-# # 	for k, v in d.items():
-# # 		f.write(f'\n\n// [{k}] //\n')
-# # 		for l in sorted(v):
-# # 			f.write(f'{l.lstrip()}')
-# # #########################################
-# search_condition = "sorted"
-# for k, v in d.items():
-# 	for l in v:
-# 		if l.find(search_condition) > 1:
-# 			print(l.strip())
-# # #########################################
 
 # # -----------------------------------------------------------------------------------------
