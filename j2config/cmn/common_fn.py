@@ -2,7 +2,6 @@
 
 import ipaddress as ip
 import nettoolkit as nt
-import numpy as np
 
 
 def str_to_list(item):

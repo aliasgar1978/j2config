@@ -1,11 +1,11 @@
 import jinja2
 from inspect import getmembers, isfunction, isclass, isroutine
 
-from j2.data_collect import DeviceDetails
-import j2.cmn.common_fn as cmn
-import j2.func as func
-from j2.func import Vrf, Vlan, Physical, Bgp, Aggregated, Loopback, Block, Summaries
-from j2.general import *
+from .data_collect import DeviceDetails
+from .cmn import common_fn as cmn
+from . import func as func
+from .func import Vrf, Vlan, Physical, Bgp, Aggregated, Loopback, Block, Summaries
+from .general import *
 
 
 class PrepareConfig():
