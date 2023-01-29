@@ -11,7 +11,7 @@ Requirements
 Installation
 ==================
 
-Install the fwOper package::
+Install the package as below::
 
     pip install --upgrade j2config
 	

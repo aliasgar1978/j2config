@@ -4,7 +4,7 @@ from inspect import getmembers, isfunction, isclass, isroutine
 from .data_collect import DeviceDetails
 from .cmn import common_fn as cmn
 from . import func as func
-from .func import Vrf, Vlan, Physical, Bgp, Aggregated, Loopback, Block, Summaries
+from .func import Vrf, Vlan, Physical, Bgp, Aggregated, Loopback
 from .general import *
 
 
@@ -16,11 +16,8 @@ class PrepareConfig():
 	# IMPORT FILTERS FOR JINJA VARIABLES
 	# -----------------------------------------
 	filters = {}
-	filters.update({'Vrf': Vrf, 
-		'Vlan': Vlan, 'Physical': Physical, 'Aggregated': Aggregated, 'Loopback': Loopback, 
-		'Bgp': Bgp,
-		'Block': Block, 
-		'Summaries': Summaries
+	filters.update({'Vrf': Vrf, 'Bgp': Bgp,
+		'Vlan': Vlan, 'Physical': Physical, 'Aggregated': Aggregated, 'Loopback': Loopback, 		
 	})
 	filters.update(dict(getmembers(cmn, isfunction)))
 	filters.update(dict(getmembers(Vrf, lambda x:not(isroutine(x))))['__dict__'] )
@@ -29,20 +26,39 @@ class PrepareConfig():
 	filters.update(dict(getmembers(Bgp, lambda x:not(isroutine(x))))['__dict__'] )
 	filters.update(dict(getmembers(Aggregated, lambda x:not(isroutine(x))))['__dict__'] )
 	filters.update(dict(getmembers(Loopback, lambda x:not(isroutine(x))))['__dict__'] )
-	filters.update(dict(getmembers(Block, lambda x:not(isroutine(x))))['__dict__'] )
-	filters.update(dict(getmembers(Summaries, lambda x:not(isroutine(x))))['__dict__'] )
 	filters.update(dict(getmembers(func, isfunction)))
 
 	def __init__(self,
 		data_file,
 		jtemplate_file,
-		output_folder,
+		output_folder=".",
 		global_variables_file=None,	
 		):
 		self.data_file = data_file
 		self.jtemplate_file = jtemplate_file.replace("\\", '/')
 		self.output_folder = output_folder
 		self.global_variables_file = global_variables_file
+
+	def custom_class_add_to_filter(self, **kwargs):
+		"""add custom classes and its methods as jinja filters. External callable.
+		"""
+		for filtername, cls in kwargs.items():
+			try:
+				if not self.filters.get(filtername):
+					self.filters.update({filtername: cls})
+				self.filters.update(dict(getmembers(cls, lambda x:not(isroutine(x))))['__dict__'] )
+			except Exception as e:
+				raise Exception(f"Class Insertion Failed for filter {filtername}\n{e}")
+
+	def custom_module_methods_add_to_filter(self, *modules):
+		"""add custom methods from module(s) as jinja filters. External callable.
+		"""
+		for module in modules:
+			try:
+				self.filters.update(dict(getmembers(module, isfunction)))
+			except Exception as e:
+				raise Exception(f"Module Insertion Failed {module}\n{e}")
+
 
 	def start(self):
 		"""kicks generation

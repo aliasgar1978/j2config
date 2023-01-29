@@ -92,10 +92,6 @@ def ipv6_urpf_acl_network(subnet):
 	pfx = ip.ip_interface(subnet)
 	return str(pfx.network.network_address)
 
-def ipv6_rpf_acl_name(subnet):
-	return "al6_rpf_" + remove_trailing_zeros(ipv6_urpf_acl_network(subnet))
-
-
 def nth_ip(net, n, withMask=False):
 	"""get n-th ip address of given network.
 	withMask: will return value along with mask else only subnet 

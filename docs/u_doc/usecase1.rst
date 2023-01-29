@@ -30,7 +30,8 @@ Detailed How To
 
 		.. attention::
 			
-			``**Excel Data File**``
+			**Excel Data File**
+
 			* It is advisable to generate the facts using  **facts_finder** package. So manual editing will be minimal. Otherwise a fresh manually prepared database will work either.
 			* There must be a ``var`` tab in excel file. with **var** as jinja variable and **default** as replacement value of the jinja variable.
 				* multiple values for a single variable can be added in a same cell by separating either by ``comma`` or ``enter``

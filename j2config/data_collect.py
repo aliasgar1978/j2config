@@ -107,12 +107,15 @@ class DeviceDetails():
 	def read_region_details(self):
 		"""reads global/regional data and drops other irrelavent region details from dataframe. 
 		"""
-		df = read_worksheet(self.global_regional_data_file, 'var') 
-		for _col in df.columns:
-			if _col in ('var', 'default'): continue
-			if _col == self.region: continue
-			df = df.drop(_col, axis=1)
-		return df
+		try:
+			df = read_worksheet(self.global_regional_data_file, 'var') 
+			for _col in df.columns:
+				if _col in ('var', 'default'): continue
+				if _col == self.region: continue
+				df = df.drop(_col, axis=1)
+			return df
+		except:
+			print("Global database unavailable or incorrect..")
 
 	def _check_n_update_region(self, df):
 		df.default = df[self.region] if df[self.region] != "" else df.default
@@ -120,6 +123,7 @@ class DeviceDetails():
 	def merge_region_details(self, df):
 		"""merge the region column details with defailt column, deletes region column and leave only default column along with var.
 		"""
+		if df is None: return pd.DataFrame()
 		df.apply(self._check_n_update_region, axis=1)
 		df = df.drop(self.region, axis=1)
 		return df

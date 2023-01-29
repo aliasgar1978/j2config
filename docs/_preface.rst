@@ -7,7 +7,7 @@ Welcome to j2config's documentation!
 What is j2config?
 ==========================
 
-facts_finder is an open python project to help working with various network devices (switches, routers) (Cisco, Juniper) configurations. 
+j2config is an open python project to help generating config for network devices (switches, routers) (Cisco, Juniper). 
 Network device configuration can be generated from jinja2 template with the help of excel database.
 the facts generated using facts_finder can be used as an input here.
 
