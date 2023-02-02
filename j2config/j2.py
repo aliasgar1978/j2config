@@ -42,11 +42,15 @@ class PrepareConfig():
 	def custom_class_add_to_filter(self, **kwargs):
 		"""add custom classes and its methods as jinja filters. External callable.
 		"""
-		for filtername, cls in kwargs.items():
+		for filtername, _cls in kwargs.items():
 			try:
-				if not self.filters.get(filtername):
-					self.filters.update({filtername: cls})
-				self.filters.update(dict(getmembers(cls, lambda x:not(isroutine(x))))['__dict__'] )
+				# if not self.filters.get(filtername):
+				self.filters.update({filtername: _cls})
+				pre = self.filters.keys()
+				self.filters.update(dict(getmembers(_cls, lambda x:not(isroutine(x))))['__dict__'] )
+				post = self.filters.keys()
+				# print(pre==post)
+				# print(getmembers(_cls, lambda x:not(isroutine(x))))
 			except Exception as e:
 				raise Exception(f"Class Insertion Failed for filter {filtername}\n{e}")
 
