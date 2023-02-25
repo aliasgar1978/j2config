@@ -55,8 +55,9 @@ Detailed How To
 			PrCfg.start()
 
 
+.. result:: Congratulations!!!
 
-	**Hurrey!!! Now you can access custom declared classes/methods from jinja template. **
+	Hurrey!!! Now you can access custom declared classes/methods from jinja template. 
 
 
 .. admonition:: Notice
