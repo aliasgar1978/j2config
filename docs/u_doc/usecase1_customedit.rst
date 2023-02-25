@@ -56,6 +56,7 @@ Detailed How To
 
 
 
+	**Hurrey!!! Now you can access custom declared classes/methods from jinja template. **
 
 
 .. admonition:: Notice
