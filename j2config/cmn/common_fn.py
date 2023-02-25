@@ -154,3 +154,20 @@ def iprint(x):
 	"""
 	print(x)
 
+def get_item(lst, n):
+	"""get the nth item from list
+
+	Args:
+		lst (list): list containing various items
+		n (int): index of item to be retrived 
+
+	Returns:
+		str: n-th item from list
+	"""
+	try:
+		if isinstance(lst, (list, tuple)):
+			return lst[n]
+		else:
+			return lst
+	except:
+		return lst

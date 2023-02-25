@@ -44,11 +44,11 @@ class DeviceDetails():
 		"""start executing
 		"""
 		self.dev_details = self.read_device()								## require
-		self.wkl = self.get_wkl()											## optional remove after global file removed
-		self.region = self.get_region()										## optional remove after global file removed
-		all_region_details = self.read_region_details()						## optional remove after global file removed
-		self.region_details = self.merge_region_details(all_region_details)	## optional remove after global file removed
-		self.var = self.merge_vars()										## optional remove after global file removed, step 2 may need
+		self.wkl = self.get_wkl()											
+		self.region = self.get_region()
+		all_region_details = self.read_region_details()						
+		self.region_details = self.merge_region_details(all_region_details)	
+		self.var = self.merge_vars()										
 		self.table = self.dev_details['table'].T.to_dict()					## require
 		self.data = {'var': self.var, 'table': self.table}					## require
 
@@ -100,7 +100,7 @@ class DeviceDetails():
 			ndf = self.device_details[self.device_details['var'] == 'region']
 			for _col in ndf.columns:
 				if _col == 'var': continue
-				return ndf[_col][ndf.index[0]]
+				return ndf[_col][ndf.index[0]].upper()
 		except:
 			raise Exception(f"CRITICAL: Data Read failed. Expected variable 'region' missing in device 'var' Worksheet")
 
