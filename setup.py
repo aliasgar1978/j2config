@@ -14,9 +14,7 @@ setuptools.setup(
     url="https://github.com/aliasgar1978/j2config",
     # package_data={
     #     'facts_finder': [
-    #         'generators/commands/*',
-    #         'modifiers/cisco/commands/*',
-    #         'modifiers/juniper/commands/*', 
+    #         'generators/commands/*',   ## j2config not have any as such
     #         ],
     # },
     packages=setuptools.find_packages(),
