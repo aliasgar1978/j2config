@@ -297,7 +297,7 @@ class Physical():
 				yield data
 				break
 
-	@staticmethod
+	# @staticmethod     # removed since older python not support
 	def interface_type(data, intf_type):
 		"""condition: is provided dataslice is of given interface type
 
@@ -310,7 +310,7 @@ class Physical():
 		"""		
 		return data['int_filter'].lower().startswith(intf_type)
 
-	@staticmethod
+	# @staticmethod     # removed since older python not support
 	def interface_type_ends(data, x):
 		"""condition: is provided dataslice ends with given argument `x`
 
