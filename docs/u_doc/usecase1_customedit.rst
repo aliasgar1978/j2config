@@ -59,7 +59,7 @@ Detailed How To
 
 .. note:: Congratulations!!!
 
-	Hurrey!!! Now you can access custom declared classes/methods from jinja template. 
+	Hurrey!!! Now you can access custom declared classes/methods from within jinja template. 
 
 
 
