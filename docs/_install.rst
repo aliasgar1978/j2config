@@ -11,9 +11,12 @@ Requirements
 Installation
 ==================
 
-Install the package as below::
+Install the j2config package using pip::
 
     pip install --upgrade j2config
+	
+There are many other ways to install packages such as conda install or manual wheel file download and install.
+You can do it as per your prefered choice of installation.
 	
 
 
