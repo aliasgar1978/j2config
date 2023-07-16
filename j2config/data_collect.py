@@ -156,18 +156,11 @@ class DeviceDetails():
 # --------------------------------------------------------------------------------------------------------
 
 class ABSRegion(ABC):
-	"""_summary_
+	"""Abstract Base Class Template to define custom/regional dataframe
 
 	Args:
 		device_details (DataFrame): Pandas DataFrame with device `var` information
 		custom_data_file (str): custom datafile.
-
-	Inherits:
-		ABC (ABC): abstract base class
-
-	Abstract Properties:
-		frames(list) : must be defined in custom class method, which should return a list of DataFrame(s) to override `var` attributes. 
-
 
 	"""	
 
