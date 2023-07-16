@@ -3,8 +3,8 @@ Custom Modifications
 ===================================================
 
 Apart from usual previous steps: 
-	* We can now add the custom classes, modules to be accessible over jinja templates.
-	* We can now override device `var` databse with custom (regional_file) database.
+	* We can now add the custom *classes, modules* to be accessible over jinja templates.
+	* We can now override device *var* databse with custom (regional_file) database.
 
 Refer below details on how to use them.
 
@@ -14,7 +14,7 @@ Refer below details on how to use them.
 -----
 
 
-*Detailed How To*
+**Detailed How To**
 
 
 	#. Import necessary custom class(es) from module, and/or import necessary module(s).
@@ -30,7 +30,7 @@ Refer below details on how to use them.
 			from custom_j2config.regional import Region    # available for j2config verion > 0.0.6 
 
 			# Custom global/Regional static variable excel database to override device local variables (optional)
-			regional_file = 'regional.xlsx'                # point to custom file
+			regional_file = 'global.xlsx'                # point to custom file
 
 
 
@@ -48,7 +48,7 @@ Refer below details on how to use them.
 			custom_modules = {module1, }  ### add all imported modules here ###
 
 
-	#. Modify custom class meta data PrepareConfig instance filters (created in previous step)
+	#. Modify PrepareConfig instance filters (created in previous page)
 
 		.. code:: python
 
@@ -67,6 +67,7 @@ Refer below details on how to use them.
 
 			### 2. Add Custom modules to above instance using `custom_module_methods_add_to_filter`.
 			PrCfg.custom_module_methods_add_to_filter(*custom_modules)
+
 
 	#. Start configuration generation
 

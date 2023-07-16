@@ -10,7 +10,7 @@ Using j2config
 -----
 
 
-*Detailed How To*
+**Detailed How To**
 
 	#. Import necessary package, modules
 
@@ -54,6 +54,7 @@ Using j2config
 				jtemplate_file=template_file,
 				output_folder=output_path,             ## optional (default: ".")
 			)
+
 
 	#. Start configuration generation
 

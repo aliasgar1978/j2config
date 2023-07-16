@@ -10,7 +10,7 @@ A Sample Execution File
 
 :download:`Sample Execution File <files/exec-j2config.py>`. A sample execution file will look similar to this
 
-Given script follows the below given file tree structure.
+Given script follows below file tree structure.
 
 
 -----
