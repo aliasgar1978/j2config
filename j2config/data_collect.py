@@ -160,13 +160,12 @@ class ABSRegion(ABC):
 
 	Args:
 		device_details (DataFrame): Pandas DataFrame with device `var` information
-		custom_data_file (str): custom datafile. (aka: global_regional_data_file)
+		custom_data_file (str): custom datafile.
 
 	Inherits:
 		ABC (ABC): abstract base class
 
 	Abstract Properties:
-		global_regional_data_file(str) : custom database file to override `var` attributes.
 		frames(list) : must be defined in custom class method, which should return a list of DataFrame(s) to override `var` attributes. 
 
 
@@ -185,14 +184,3 @@ class ABSRegion(ABC):
 		"""must be defined in custom class method, which should return a list of DataFrame(s) to override `var` attributes. 
 		"""		
 		pass
-
-	@property
-	@abstractmethod
-	def global_regional_data_file(self):
-		"""custom database file to override `var` attributes.
-
-		Returns:
-			str: custom datafile. 
-		"""		
-		return self.custom_data_file
-
