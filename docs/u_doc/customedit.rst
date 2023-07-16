@@ -71,6 +71,8 @@ Refer below details on how to use them.
 
 	#. Start configuration generation
 
+		.. code:: python
+
 			PrCfg.start()
 
 

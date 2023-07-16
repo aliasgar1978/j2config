@@ -58,6 +58,8 @@ Using j2config
 
 	#. Start configuration generation
 
+		.. code:: python
+
 			PrCfg.start()
 
 
