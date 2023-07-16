@@ -7,9 +7,10 @@ Using j2config
 	#. prepare configurations using inputs.
 
 
+-----
 
-Detailed How To
---------------------
+
+*Detailed How To*
 
 	#. Import necessary package, modules
 
@@ -25,7 +26,6 @@ Detailed How To
 			data_file = "excel-datafile.xlsx"       # provide Excel database file 
 			template_file = "text_template.j2"      # provide text jinja template file.
 			output_path = "./output/"               # provide path where new config to be stored.(optional)
-			global_var_file = "global-vars.xlsx"    # global variable excel file if any. (optional)
 
 
 		.. attention::
@@ -52,19 +52,19 @@ Detailed How To
 			PrCfg = PrepareConfig(
 				data_file=data_file,
 				jtemplate_file=template_file,
-				output_folder=output_path,             ## optional
-				global_variables_file=global_var_file, ## optional
+				output_folder=output_path,             ## optional (default: ".")
 			)
+
+	#. Start configuration generation
+
 			PrCfg.start()
 
 
-
+-----
 
 
 .. admonition:: Notice
 
-	Make a note that output generates based on jinja template and template variables.		
-
-
-	Make sure to cross-check the generated facts before using it.
+	* Make a note that output generates based on jinja template and template variables.		
+	* Make sure to cross-check the generated facts before using it.
 

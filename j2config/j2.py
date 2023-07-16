@@ -10,7 +10,18 @@ from .general import *
 
 class PrepareConfig():
 	"""boiler plate code class for start configuration preparation
-	"""
+
+	Args:
+		data_file (str): Excel database
+		jtemplate_file (str): Jinja Template
+		output_folder (str, optional): output path. Defaults to ".".
+		regional_file (str, optional): custom static regional variable file. Defaults to None. (overrides device var)
+		regional_class (class, optional): custom class returning frames to be merge with device var . Defaults to None.
+
+	Raises:
+		Exception: Raise for Custom class insertion
+		Exception: Raise for Custom module insertion
+	"""	
 
 	# -----------------------------------------
 	# IMPORT FILTERS FOR JINJA VARIABLES
@@ -32,25 +43,26 @@ class PrepareConfig():
 		data_file,
 		jtemplate_file,
 		output_folder=".",
-		global_variables_file=None,	
+		regional_file=None,
+		regional_class=None,
 		):
+		"""Object Initializer
+		"""		
 		self.data_file = data_file
 		self.jtemplate_file = jtemplate_file.replace("\\", '/')
 		self.output_folder = output_folder
-		self.global_variables_file = global_variables_file
+		self.regional_file = regional_file
+		self.regional_class = regional_class
 
 	def custom_class_add_to_filter(self, **kwargs):
 		"""add custom classes and its methods as jinja filters. External callable.
 		"""
 		for filtername, _cls in kwargs.items():
 			try:
-				# if not self.filters.get(filtername):
 				self.filters.update({filtername: _cls})
 				pre = self.filters.keys()
 				self.filters.update(dict(getmembers(_cls, lambda x:not(isroutine(x))))['__dict__'] )
 				post = self.filters.keys()
-				# print(pre==post)
-				# print(getmembers(_cls, lambda x:not(isroutine(x))))
 			except Exception as e:
 				raise Exception(f"Class Insertion Failed for filter {filtername}\n{e}")
 
@@ -63,12 +75,19 @@ class PrepareConfig():
 			except Exception as e:
 				raise Exception(f"Module Insertion Failed {module}\n{e}")
 
-
 	def start(self):
-		"""kicks generation
+		"""kick start generation
 		"""
 		# ## LOAD - DATA
-		DD = DeviceDetails(self.global_variables_file, self.data_file)
+		DD = DeviceDetails(self.data_file)
+		frames = []
+		try:
+			RCD = self.regional_class(DD.device_details, self.regional_file)
+			frames = RCD.frames
+		except:
+			pass
+		DD.merge_with_var_frames(frames)
+		DD.read_table()
 
 		# ## LOAD - JINJA TEMPLATE AND ENVIRONMENT
 		templateLoader = jinja2.FileSystemLoader(searchpath='')

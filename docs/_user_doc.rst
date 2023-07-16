@@ -7,7 +7,7 @@ User documentation!
    :caption: Contents:
 
 
-   Use case <u_doc/usecase1>
-   Using with custom filters <u_doc/usecase1_customedit>
-   sample template data <u_doc/template>
-   sample execution code <u_doc/usecase1_customedit_sample>
+   Use case <u_doc/usecase>
+   Custom Modifications <u_doc/customedit>
+   sample jinja template <u_doc/template>
+   sample execution code <u_doc/sample>

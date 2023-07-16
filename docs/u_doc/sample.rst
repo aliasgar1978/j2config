@@ -10,6 +10,10 @@ A Sample Execution File
 
 :download:`Sample Execution File <files/exec-j2config.py>`. A sample execution file will look similar to this
 
+Given script follows the below given file tree structure.
+
+
+-----
 
 
 Folder Tree Structure
@@ -35,3 +39,9 @@ Folder Tree Structure
 		|
 		| - + j2-outputs   ( folder where outputs will be stored )
 		    | - generated config will appear here.
+
+
+-----
+
+
+* If you are changing the Tree structure, than modify your execution script accordingly to read the files from appropriate path.

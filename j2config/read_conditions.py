@@ -7,8 +7,13 @@ import nettoolkit as nt
 
 def get_conditions(jinja_flie):
 	"""get all conditional statements from jinja file
-	--> dict
-	"""
+
+	Args:
+		jinja_flie (str): jinja template file
+
+	Returns:
+		dict: dictionary with list of jinja variables, conditions, and loops.
+	"""	
 	d = {'conditions':set(), 'loops':set(), 'variables': set() }
 	with open(jinja_flie, 'r') as f:
 		lns = f.readlines()
@@ -23,8 +28,13 @@ def get_conditions(jinja_flie):
 
 def get_variables(jinja_flie):
 	"""get all jinja variables defined in jinja file
-	--> set
-	"""
+
+	Args:
+		jinja_flie (str): jinja template file
+
+	Returns:
+		set: set of jinja variables
+	"""	
 	conds = set()
 	with open(jinja_flie, 'r') as f:
 		lns = f.readlines()
@@ -43,9 +53,7 @@ def get_variables(jinja_flie):
 		if starts == []: continue
 		for s, e in zip(starts, ends):
 			cond = ln[s:e+2]
-			# print(cond, end='\t' )
 			conds.add(cond)
-		# print()
 	return conds
 
 # # -----------------------------------------------------------------------------------------

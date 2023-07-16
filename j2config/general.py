@@ -2,7 +2,13 @@
 def get_model_template_version(template_file):
 	"""returns the template version/model from template file if defined with variables `template_version` and `set model`.
 	return dash (`-`) if none.
-	"""
+
+	Args:
+		template_file (str): jinja template file
+
+	Returns:
+		tuple: with values of template model and version details
+	"""	
 	template_ver, model = '-', '-'
 	with open(template_file, 'r') as f:
 		lns = f.readlines()

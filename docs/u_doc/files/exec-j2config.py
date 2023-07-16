@@ -8,6 +8,9 @@ from j2config import PrepareConfig
 from pathlib import *
 import sys
 
+# --------------------------------------------
+# path / folder settings
+# --------------------------------------------
 p = Path(".")
 previous_path = p.resolve().parents[0]
 sys.path.insert(len(sys.path), str(previous_path))
@@ -25,6 +28,7 @@ output_folder    = str(previous_path.joinpath('j2-outputs'))
 # ## ------------------------------------------
 from custom_j2config.classes import Summaries, Block, Vrf, Vlan, Bgp, Physical
 from custom_j2config import module1
+from custom_j2config.regional import Region
 # ## ------------------------------------------
 
 
@@ -35,8 +39,8 @@ from custom_j2config import module1
 # ------------------------------------------------------------------------------------------------------------------
 
 # get the PrepareConfig Object
-def prep_config(data_file, jtemplate_file, output_folder, global_variables_file):
-	PrCfg = PrepareConfig(data_file, jtemplate_file, output_folder, global_variables_file)
+def prep_config(data_file, jtemplate_file, output_folder, regional_file, regional_class):
+	PrCfg = PrepareConfig(data_file, jtemplate_file, output_folder, regional_file, regional_class)
 	return PrCfg
 
 
@@ -61,7 +65,7 @@ def exec_custom_modifications(PrCfg, custom_classes):
 
 
 # Main Function Execution flow.
-def main(data_file, jtemplate_file, output_folder, global_variables_file):
+def main(data_file, jtemplate_file, output_folder, regional_file=None, regional_class=None):
 
 	# ------------------------------------------------------------------------------------------------------------------
 	## 0. Start ------
@@ -71,7 +75,7 @@ def main(data_file, jtemplate_file, output_folder, global_variables_file):
 	# ------------------------------------------------------------------------------------------------------------------
 	## 1. prepare config -----
 	try:
-		PrCfg = prep_config(data_file, jtemplate_file, output_folder, global_variables_file)
+		PrCfg = prep_config(data_file, jtemplate_file, output_folder, regional_file, regional_class)
 		print(f"1...", end='\t')
 	except Exception as e:
 		print(f"ConfigGen Preparation Failed..\n {e}")
@@ -115,10 +119,17 @@ if __name__ == '__main__':
 
 	# ----- update inputs & execute main --------
 	main(
+		#
+		# mandatory arguments: Excel database and Jinja Template files
 		data_file=f'{capture_folder}/device_data-clean.xlsx',
 		jtemplate_file=f'{jtemplate_folder}/jinja_template.j2',
-		output_folder=output_folder,     
-		global_variables_file=f'{jtemplate_folder}/global.xlsx',
+		#
+		## optional argument: output folder parth (default ".")
+		output_folder=output_folder,
+		#
+		## optional arguments:  to override device var values. (use after necessary custom `Region` class imports)
+		regional_file='regional_database.xlsx',
+		regional_class=Region,
 	)
 
 # ------------------------------------------------------------------------------------------------------------------

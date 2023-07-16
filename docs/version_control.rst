@@ -27,6 +27,12 @@ Version Control
    * - 0.0.5
      - Mar 23, 2023
      - bug fix to support older version python 3.9, since python<3.10 does not support staticmethod call. 
+   * - 0.0.6
+     - Jul 16, 2023
+     - * removed custom global file read and processing from standard implementation. 
+       * added a hook ABSRegion class in order to support it via custom implementation.  
+       * input variable global_file for PrepareConfig class changed to regional_file.
+       * a new variable regional_class added for PrepareConfig class in order to process custom regional_class along with custom regional_file.
 
 
 -----

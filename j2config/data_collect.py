@@ -1,12 +1,24 @@
 
 
 import pandas as pd
+from abc import ABC, abstractmethod
+
 # ---------------------------------------------------------
 
 def read_worksheet(file, wks):
-	"""read the excel worksheet 
-	returns -> pandas DataFrame
-	"""
+	"""read an excel worksheet 
+
+
+	Args:
+		file (str): excel file name
+		wks (str): worksheet name
+
+	Raises:
+		Exception: Raised for file read fail, or worksheet missing
+
+	Returns:
+		DataFrame: Pandas DataFrame Object
+	"""	
 	try:
 		df = pd.read_excel(file, sheet_name=wks).fillna("")
 	except:
@@ -14,17 +26,28 @@ def read_worksheet(file, wks):
 	return df
 
 def read_excel(file):
-	"""read the excel file, all worksheet
-	returns -> dictionary with sheetname as key and pandas DataFrame as value
-	"""
+	"""read excel file, all worksheet
+
+	Args:
+		file (str): excel file name
+
+	Returns:
+		dict: dictionary of dataframes.
+	"""	
 	dfd = pd.read_excel(file, None)
 	for k,v in dfd.items():
 		dfd[k] = v.fillna("")
 	return dfd
 
 def to_int(item):
-	"""try to convert item to integer
-	"""
+	"""try to converts item to integer
+
+	Args:
+		item (str): input string
+
+	Returns:
+		int, str: returns integer value if it is number, else same as input string
+	"""	
 	try:
 		return int(item)
 	except:
@@ -33,28 +56,44 @@ def to_int(item):
 
 class DeviceDetails():
 	""" Device details operations
-	"""
 
-	def __init__(self, global_file, device_file):
-		self.global_regional_data_file = global_file
+	Args:
+		device_file (str): Excel device database file 
+
+	Raises:
+		Exception: Raised for input error: if device filename missing
+		Exception: Raised for input error: if provided device file missing or read fails.
+
+	Returns:
+		DeviceDetails: DeviceDetails object
+	"""	
+
+	def __init__(self, device_file):
+		"""instance initializer
+		"""		
 		self.device_filename = device_file
-		self.read()
+		self.verify_input_dev_file()
 
-	def read(self):
-		"""start executing
-		"""
-		self.dev_details = self.read_device()								## require
-		self.wkl = self.get_wkl()											
-		self.region = self.get_region()
-		all_region_details = self.read_region_details()						
-		self.region_details = self.merge_region_details(all_region_details)	
-		self.var = self.merge_vars()										
-		self.table = self.dev_details['table'].T.to_dict()					## require
-		self.data = {'var': self.var, 'table': self.table}					## require
+	def verify_input_dev_file(self):
+		"""check if provided input device file 
+
+		Raises:
+			Exception: Raised for input error: if device filename missing
+			Exception: Raised for input error: if provided device file missing or read fails.
+		"""		
+		if not self.device_filename:
+			raise Exception(f'input error: input device file name {self.device_filename}')
+		try:
+			self.dev_details = self.read_device()								## require		
+		except Exception as e:
+			raise Exception(f'input error: input device file either missing or missing with necessary sheets\n{e}')
 
 	def read_device(self):
-		"""read device database
-		"""
+		"""reads device database
+
+		Returns:
+			dict: dictionary of dataframe
+		"""		
 		dr = {'var':{}, 'table':None}
 		dr['var']['device'] = read_worksheet(self.device_filename, 'var') 		
 		dr['table'] = self.merged_table_columns()
@@ -62,8 +101,11 @@ class DeviceDetails():
 		return dr
 
 	def merged_table_columns(self):
-		"""merge the all different interfaces/protocol etc details from individual tabs in to a single dataframe.
-		"""
+		"""merges all different type of interfaces/protocols details in to a single dataframe.
+
+		Returns:
+			DataFrame: Pandas DataFrame object collecting all interfaces/protocols details 
+		"""		
 		dfd = read_excel(self.device_filename)
 		del(dfd['var'])
 		df_table = pd.DataFrame({'key':[]})
@@ -77,61 +119,80 @@ class DeviceDetails():
 				pass
 		return df_table
 
-	def get_wkl(self):
-		"""get the device location detail from device var details. 'site' field is required for the same.
-		"""
-		try:
-			df_var = self.device_details 
-			for _col in df_var.columns:
-				if _col == 'var': continue
-				default = df_var[df_var['var'] == 'site'][_col]
-				wkl = default[default.index[0]]
-				if wkl: break
-		except:
-			raise Exception(f"CRITICAL: Data Read failed. Expected variable 'site' missing in device 'var' Worksheet")
-		if not wkl:
-			raise Exception(f"CRITICAL: Data Read failed. Expected value of variable 'site' missing on device 'var' Worksheet")
-		return wkl
+	def merge_with_var_frames(self, regional_frames):
+		"""merge device var details with provided custom regional DataFrame(s) 
+		custom regional frame variables/values  overrides device var variables/values.
 
-	def get_region(self):
-		"""get the region detail from device var details. 'region' field is required for the same.
-		"""
-		try:
-			ndf = self.device_details[self.device_details['var'] == 'region']
-			for _col in ndf.columns:
-				if _col == 'var': continue
-				return ndf[_col][ndf.index[0]].upper()
-		except:
-			raise Exception(f"CRITICAL: Data Read failed. Expected variable 'region' missing in device 'var' Worksheet")
+		Args:
+			regional_frames (list): list of custom regional DataFrames to be added to var.
+		"""		
+		frames = [self.device_details,]
+		if regional_frames:
+			frames.extend(regional_frames)
+		self.var = self.merge_vars(frames)
 
-	def read_region_details(self):
-		"""reads global/regional data and drops other irrelavent region details from dataframe. 
+	def read_table(self):
+		"""reads table dataframe and add var/table to dataframe dictionary
 		"""
-		try:
-			df = read_worksheet(self.global_regional_data_file, 'var') 
-			for _col in df.columns:
-				if _col in ('var', 'default'): continue
-				if _col == self.region: continue
-				df = df.drop(_col, axis=1)
-			return df
-		except:
-			print("Global database unavailable or incorrect..")
+		self.table = self.dev_details['table'].T.to_dict()
+		self.data = {'var': self.var, 'table': self.table}
 
-	def _check_n_update_region(self, df):
-		df.default = df[self.region] if df[self.region] != "" else df.default
+	def merge_vars(self, frames):
+		"""merges var details from two different dataframes ( region and device - databases )
+		(support definition)
 
-	def merge_region_details(self, df):
-		"""merge the region column details with defailt column, deletes region column and leave only default column along with var.
-		"""
-		if df is None: return pd.DataFrame()
-		df.apply(self._check_n_update_region, axis=1)
-		df = df.drop(self.region, axis=1)
-		return df
+		Args:
+			frames (list): list of DataFrame(s) to be merged
 
-	def merge_vars(self):
-		"""merge the var details from two different dataframes ( region and device - databases )
-		"""
-		frames= [self.region_details, self.device_details]
+		Returns:
+			DataFrame: merged DataFrame (`var`)
+		"""		
 		return pd.concat(frames, ignore_index=True).set_index('var').to_dict()['default']
 
-# ---------------------------------------------------------
+
+
+# --------------------------------------------------------------------------------------------------------
+# Regional DataFrame input template class
+# --------------------------------------------------------------------------------------------------------
+
+class ABSRegion(ABC):
+	"""_summary_
+
+	Args:
+		device_details (DataFrame): Pandas DataFrame with device `var` information
+		custom_data_file (str): custom datafile. (aka: global_regional_data_file)
+
+	Inherits:
+		ABC (ABC): abstract base class
+
+	Abstract Properties:
+		global_regional_data_file(str) : custom database file to override `var` attributes.
+		frames(list) : must be defined in custom class method, which should return a list of DataFrame(s) to override `var` attributes. 
+
+
+	"""	
+
+	def __init__(self, device_details, custom_data_file):
+		"""instance initializer
+
+		"""		
+		self.device_details = device_details
+		self.custom_data_file = custom_data_file
+
+	@property
+	@abstractmethod
+	def frames(self):
+		"""must be defined in custom class method, which should return a list of DataFrame(s) to override `var` attributes. 
+		"""		
+		pass
+
+	@property
+	@abstractmethod
+	def global_regional_data_file(self):
+		"""custom database file to override `var` attributes.
+
+		Returns:
+			str: custom datafile. 
+		"""		
+		return self.custom_data_file
+

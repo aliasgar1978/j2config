@@ -68,11 +68,11 @@ Sample Jinja Template data to use with  j2config
 
 
 
+-----
+
 
 .. admonition:: Notice
 
-	Make a note that output generates based on jinja template and template variables.		
-
-
-	Make sure to cross-check the generated facts before using it.
+	* Make a note that output generates based on jinja template and template variables.
+	* Make sure to cross-check the generated facts before using it.
 

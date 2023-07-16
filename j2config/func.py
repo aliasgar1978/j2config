@@ -13,6 +13,9 @@ from nettoolkit import IPv4
 class Vrf():
 	"""device vrf/instances
 
+	Args:
+		table (dict): dataframe dictionary
+
 	Returns:
 		Vrf: Instance of VRF
 
@@ -21,6 +24,7 @@ class Vrf():
 	"""	
 
 	def __init__(self, table):
+		
 		self.table = table
 
 	def __iter__(self):
@@ -109,6 +113,15 @@ class Vrf():
 
 class Vlan():
 	"""device Vlan/instances
+
+	Args:
+		table (dict): dataframe dictionary
+
+	Returns:
+		Vlan: Instance of Vlan
+
+	Yields:
+		Vlan: Instance of Vlan
 	"""	
 	def __init__(self, table):
 		self.table = table
@@ -185,6 +198,15 @@ class Vlan():
 
 class Bgp():
 	"""device Bgp/instances
+
+	Args:
+		table (dict): dataframe dictionary
+
+	Returns:
+		Bgp: Instance of Bgp
+
+	Yields:
+		Bgp: Instance of Bgp
 	"""	
 
 	def __init__(self, table):
@@ -232,6 +254,15 @@ class Bgp():
 
 class Physical():
 	"""device Physical/instances
+
+	Args:
+		table (dict): dataframe dictionary
+
+	Returns:
+		Physical: Instance of Physical
+
+	Yields:
+		Physical: Instance of Physical
 	"""	
 	def __init__(self, table):
 		self.table = table
@@ -326,6 +357,15 @@ class Physical():
 
 class Aggregated():
 	"""device Aggregated/instances
+
+	Args:
+		table (dict): dataframe dictionary
+
+	Returns:
+		Aggregated: Instance of Aggregated
+
+	Yields:
+		Aggregated: Instance of Aggregated
 	"""	
 	def __init__(self, table):
 		self.table = table
@@ -349,6 +389,15 @@ class Aggregated():
 
 class Loopback():
 	"""device Loopback/instances
+
+	Args:
+		table (dict): dataframe dictionary
+
+	Returns:
+		Loopback: Instance of Loopback
+
+	Yields:
+		Loopback: Instance of Loopback
 	"""	
 	def __init__(self, table):
 		self.table = table
