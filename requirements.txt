@@ -1,4 +1,6 @@
-nettoolkit>0.0.16
+nettoolkit>0.1.1
+nettoolkit_db
+nettoolkit_common
 pandas
 jinja2
 openpyxl

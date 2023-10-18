@@ -1,8 +1,6 @@
 
 
-import nettoolkit as nt
-
-
+from nettoolkit_common import LST
 
 
 def get_conditions(jinja_flie):
@@ -42,8 +40,8 @@ def get_variables(jinja_flie):
 		starts, ends = [], []
 		for i in range(20):
 			if i == 0: s,e = 0,0
-			start = nt.STR.find_multi(ln, '{{', start=s, count=None, index=True, beginwith=False)
-			end   = nt.STR.find_multi(ln, '}}', start=e, count=None, index=True, beginwith=False)
+			start = STR.find_multi(ln, '{{', start=s, count=None, index=True, beginwith=False)
+			end   = STR.find_multi(ln, '}}', start=e, count=None, index=True, beginwith=False)
 			if start == -1: break
 			starts.append(start)
 			ends.append(end)

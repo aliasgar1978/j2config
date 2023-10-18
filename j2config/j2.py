@@ -4,7 +4,7 @@ from inspect import getmembers, isfunction, isclass, isroutine
 from .data_collect import DeviceDetails
 from .cmn import common_fn as cmn
 from . import func as func
-from .func import Vrf, Vlan, Physical, Bgp, Aggregated, Loopback
+from .func import Vrf, Vlan, Physical, Bgp, Aggregated, Loopback, Ospf, Static
 from .general import *
 
 
@@ -29,6 +29,7 @@ class PrepareConfig():
 	filters = {}
 	filters.update({'Vrf': Vrf, 'Bgp': Bgp,
 		'Vlan': Vlan, 'Physical': Physical, 'Aggregated': Aggregated, 'Loopback': Loopback, 		
+		'Ospf': Ospf, 'Static': Static,
 	})
 	filters.update(dict(getmembers(cmn, isfunction)))
 	filters.update(dict(getmembers(Vrf, lambda x:not(isroutine(x))))['__dict__'] )
@@ -37,6 +38,8 @@ class PrepareConfig():
 	filters.update(dict(getmembers(Bgp, lambda x:not(isroutine(x))))['__dict__'] )
 	filters.update(dict(getmembers(Aggregated, lambda x:not(isroutine(x))))['__dict__'] )
 	filters.update(dict(getmembers(Loopback, lambda x:not(isroutine(x))))['__dict__'] )
+	filters.update(dict(getmembers(Static, lambda x:not(isroutine(x))))['__dict__'] )
+	filters.update(dict(getmembers(Ospf, lambda x:not(isroutine(x))))['__dict__'] )
 	filters.update(dict(getmembers(func, isfunction)))
 
 	def __init__(self,

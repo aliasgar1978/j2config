@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="j2config",
-    version="0.0.6",
+    version="0.1.0",
     author="ALIASGAR - ALI",
     author_email="aholo2000@gmail.com",
     description="configuration generation using jinja2 - for Networking Geeks",
@@ -24,6 +24,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.7',
-    install_requires=['pandas', 'jinja2', 'xlrd', 'openpyxl', 'nettoolkit'],
+    install_requires=['pandas', 'jinja2', 'xlrd', 'openpyxl', 'nettoolkit', 'nettoolkit_db', 'nettoolkit_common'],
 )
 

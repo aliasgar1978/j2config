@@ -162,6 +162,13 @@ class ABSRegion(ABC):
 		device_details (DataFrame): Pandas DataFrame with device `var` information
 		custom_data_file (str): custom datafile.
 
+	Inherits:
+		ABC (ABC): abstract base class
+
+	Abstract Properties:
+		frames(list) : must be defined in custom class method, which should return a list of DataFrame(s) to override `var` attributes. 
+
+
 	"""	
 
 	def __init__(self, device_details, custom_data_file):

@@ -1,7 +1,10 @@
 
 
 import ipaddress as ip
-import nettoolkit as nt
+from nettoolkit_common import LST
+from nettoolkit.addressing import addressing as ip_addressing
+from nettoolkit.addressing import IPv4
+from nettoolkit.addressing import get_summaries as nt_get_summaries
 
 
 def str_to_list(item):
@@ -101,9 +104,9 @@ def groups_of_nine(lst):
 	Returns:
 		list: updated list of (lists: containing 9 elements)
 	"""	
-	lst = nt.LST.convert_vlans_list_to_range_of_vlans_list(lst)
+	lst = LST.convert_vlans_list_to_range_of_vlans_list(lst)
 	lst = [ str(_) for _ in lst ]
-	return nt.LST.split(lst, 9)	
+	return LST.split(lst, 9)	
 
 def physical_if_allowed(vlan, table):
 	"""condition: checks for `filter==physical` and `vlan in vlan_members`
@@ -116,7 +119,7 @@ def physical_if_allowed(vlan, table):
 		int: interface value of matching row
 	"""	
 	for key, data in table.items():
-		if data['filter'].lower()=='physical' and int(vlan) in nt.LST.expand_vlan_list(str_to_list(data['vlan_members'])):
+		if data['filter'].lower()=='physical' and int(vlan) in LST.expand_vlan_list(str_to_list(data['vlan_members'])):
 			return data['interface']
 	return ""
 
@@ -166,7 +169,7 @@ def nth_ip(net, n, withMask=False):
 	"""	
 	try:
 		_net = str(ip.ip_interface(net).network)
-		v4 = nt.addressing(_net)
+		v4 = ip_addressing(_net)
 		return v4.n_thIP(n, True) if withMask else v4[n]
 	except ValueError:
 		return ""
@@ -180,9 +183,12 @@ def mask(net):
 	Returns:
 		str: subnet mask
 	"""	
-	_net = str(ip.ip_interface(net).network)
-	v4 = nt.addressing(_net)
-	return v4.mask
+	if net:
+		_net = str(ip.ip_interface(net).network)
+		v4 = ip_addressing(_net)
+		return v4.mask
+	else:
+		return 'n/a'
 
 def netmask(net):
 	"""get network mask for given network (eg: 255.255.255.0)
@@ -193,7 +199,10 @@ def netmask(net):
 	Returns:
 		str: subnet mask
 	"""	
-	return str(ip.ip_interface(net).netmask)
+	try:
+		return str(ip.ip_interface(net).netmask)
+	except:
+		return ""
 
 def invmask(net):
 	"""get inverse mask for given network (eg: 0.0.0.255)
@@ -239,8 +248,8 @@ def v4addressing(ip, mask="32"):
 	Returns:
 		IPv4: IPv4 object
 	"""	
-	if ip.find("/") > 0: return nt.IPv4(ip)
-	return nt.IPv4(ip+"/"+str(mask))
+	if ip.find("/") > 0: return IPv4(ip)
+	return IPv4(ip+"/"+str(mask))
 
 def get_summaries(lst_of_pfxs):
 	"""get the summaries for provided prefixes.
@@ -251,11 +260,11 @@ def get_summaries(lst_of_pfxs):
 	Returns:
 		list: list of summarized prefixes
 	"""	
-	lst_of_pfxs = nt.LST.remove_empty_members(lst_of_pfxs)
+	lst_of_pfxs = LST.remove_empty_members(lst_of_pfxs)
 	try:
-		return nt.get_summaries(*lst_of_pfxs)
+		return nt_get_summaries(*lst_of_pfxs)
 	except:
-		print(f"ERROR RECEIVE SUMMARIES {lst_of_pfxs}")
+		print(f"ERROR RECEIVE SUMMARIES")# {lst_of_pfxs}")
 		return []
 
 def iprint(x): 
@@ -283,3 +292,9 @@ def get_item(lst, n):
 			return lst
 	except:
 		return lst
+
+def as_path_repeat(asn, times):
+	if not asn: return ""
+	asn = asn.strip() + " "
+	asp_prep_string = asn*times
+	return asp_prep_string.strip()

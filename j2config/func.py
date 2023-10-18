@@ -4,7 +4,7 @@
 
 # import fields
 from .cmn.common_fn import *
-from nettoolkit import IPv4
+from nettoolkit.addressing import IPv4
 
 
 
@@ -68,7 +68,7 @@ class Vrf():
 		Returns:
 			list: sorted vpnids
 		"""		
-		self.sorted_vpnids = sorted([ int(_['vrf_vpnid'])  for _ in self.vrf_not_none() ])
+		self.sorted_vpnids = sorted([ int(_['vrf_vpnid'])  for _ in self.vrf_not_none() if _['vrf_vpnid'] ])
 		return self.sorted_vpnids
 
 	def sorted_vrf_data(self):
@@ -91,7 +91,7 @@ class Vrf():
 		"""		
 		for vpnid in self.sorted_vpnids:
 			for data in self.vrf_not_none():
-				if int(data['vrf_vpnid']) == vpnid: 
+				if data['vrf_vpnid'] and int(data['vrf_vpnid']) == vpnid: 
 					yield data
 					break
 
@@ -417,6 +417,73 @@ class Loopback():
 			bool: result of condition
 		"""				
 		return data['filter'].lower() == 'loopback'
+
+
+class Static():
+	"""device static
+
+	Args:
+		table (dict): dataframe dictionary
+
+	Returns:
+		Static: Instance of Static
+
+	Yields:
+		Static: Instance of Static
+	"""	
+	def __init__(self, table):
+		self.table = table
+
+	def __iter__(self):
+		for key, data in self.table.items():
+			if self.is_static(data): yield data
+
+	@staticmethod
+	def is_static(data):
+		"""Condition: Checks if provided data is static data
+
+		Args:
+			data (DataFrame): Pandas DataFrame containing `filter` column
+
+		Returns:
+			bool: result of condition
+		"""				
+		return data['filter'].lower() == 'static'
+
+
+class Ospf():
+	"""device Ospf
+
+	Args:
+		table (dict): dataframe dictionary
+
+	Returns:
+		Ospf: Instance of Ospf
+
+	Yields:
+		Ospf: Instance of Ospf
+	"""	
+	def __init__(self, table):
+		self.table = table
+
+	def __iter__(self):
+		for key, data in self.table.items():
+			if self.is_ospf(data): yield data
+
+	@staticmethod
+	def is_ospf(data):
+		"""Condition: Checks if provided data is ospf data
+
+		Args:
+			data (DataFrame): Pandas DataFrame containing `filter` column
+
+		Returns:
+			bool: result of condition
+		"""				
+		return data['filter'].lower() == 'ospf'
+
+
+
 
 
 
