@@ -6,11 +6,22 @@
 from .cmn.common_fn import *
 from nettoolkit.addressing import IPv4
 
+# -----------------------------------------------------------------------------------------------
 
+class Common():
 
+	def __init__(self, table):
+		self.table = table
+		self.filter = self.__class__.__name__.lower()
 
+	def __iter__(self):
+		for key, data in self.table.items():
+			if data['filter'].lower() == self.filter: 
+				yield data
 
-class Vrf():
+# -----------------------------------------------------------------------------------------------
+
+class Vrf(Common):
 	"""device vrf/instances
 
 	Args:
@@ -23,34 +34,14 @@ class Vrf():
 		Vrf: Instance of VRF
 	"""	
 
-	def __init__(self, table):
-		
-		self.table = table
-
-	def __iter__(self):
-		for key, data in self.table.items():
-			if self.is_vrf(data): yield data
-
-	@staticmethod
-	def is_vrf(data):
-		"""condition: `filter==vrf`
-
-		Args:
-			data (DataFrame): DataFrame containing a column `filter`
-
-		Returns:
-			bool: result of condition
-		"""		
-		return data['filter'].lower() == 'vrf'
-
 	def vrf_not_none(self):
 		"""condition: `vrf is not None` 
 
 		Yields:
 			data_slice: data from Row that matches condition
 		"""		
-		for key, data in self.table.items():
-			if self.is_vrf(data) and data['vrf'] != "":
+		for data in self:
+			if data['vrf'] != "":
 				yield data
 
 	def sorted(self):
@@ -108,10 +99,9 @@ class Vrf():
 			if data['vrf'] == vrf: 
 				yield data
 
+# -----------------------------------------------------------------------------------------------
 
-
-
-class Vlan():
+class Vlan(Common):
 	"""device Vlan/instances
 
 	Args:
@@ -123,25 +113,6 @@ class Vlan():
 	Yields:
 		Vlan: Instance of Vlan
 	"""	
-	def __init__(self, table):
-		self.table = table
-
-	def __iter__(self):
-		for key, data in self.table.items():
-			if self.is_vlan(data): yield data
-
-	@staticmethod
-	def is_vlan(data):
-		"""Condition: Checks if provided data is vlan data
-
-		Args:
-			data (DataFrame): Pandas DataFrame containing `filter` column
-
-		Returns:
-			bool: result of condition
-		"""		
-		return data['filter'].lower() == 'vlan'
-
 
 	def __vlans_range(self, start, stop):
 		for data in self:
@@ -195,8 +166,9 @@ class Vlan():
 		for data in self:
 			if data and data['intvrf'] == vrf: yield data
 
+# -----------------------------------------------------------------------------------------------
 
-class Bgp():
+class Bgp(Common):
 	"""device Bgp/instances
 
 	Args:
@@ -209,33 +181,14 @@ class Bgp():
 		Bgp: Instance of Bgp
 	"""	
 
-	def __init__(self, table):
-		self.table = table
-
-	def __iter__(self):
-		for key, data in self.table.items():
-			if self.is_bgp(data): yield data
-
-	@staticmethod
-	def is_bgp(data):
-		"""Condition: Checks if provided data is bgp data
-
-		Args:
-			data (DataFrame): Pandas DataFrame containing `filter` column
-
-		Returns:
-			bool: result of condition
-		"""		
-		return data['filter'].lower() == 'bgp'
-
 	def vrf_not_none(self):
 		"""yields data slice(s) for the bgp information where `bgp_vrf` is not none
 
 		Yields:
 			data_slice: of matching bgp details
 		"""		
-		for key, data in self.table.items():
-			if self.is_bgp(data) and data['bgp_vrf'] != "":
+		for data in self:
+			if data['bgp_vrf'] != "":
 				yield data
 
 	def bgp_peers(self, vrf):
@@ -251,8 +204,9 @@ class Bgp():
 			if data['bgp_vrf'] == vrf:
 				yield data
 
+# -----------------------------------------------------------------------------------------------
 
-class Physical():
+class Physical(Common):
 	"""device Physical/instances
 
 	Args:
@@ -264,24 +218,6 @@ class Physical():
 	Yields:
 		Physical: Instance of Physical
 	"""	
-	def __init__(self, table):
-		self.table = table
-
-	@staticmethod
-	def is_physical(data):
-		"""Condition: Checks if provided data is Physical Interface data
-
-		Args:
-			data (DataFrame): Pandas DataFrame containing `filter` column
-
-		Returns:
-			bool: result of condition
-		"""		
-		return data['filter'].lower() == 'physical'
-
-	def __iter__(self):
-		for key, data in self.table.items():
-			if self.is_physical(data): yield data
 
 	def sorted(self):
 		"""provides list of sorted interface numbers
@@ -354,8 +290,9 @@ class Physical():
 		"""		
 		return data['int_filter'].lower().endswith(x)
 
+# -----------------------------------------------------------------------------------------------
 
-class Aggregated():
+class Aggregated(Common):
 	"""device Aggregated/instances
 
 	Args:
@@ -367,27 +304,11 @@ class Aggregated():
 	Yields:
 		Aggregated: Instance of Aggregated
 	"""	
-	def __init__(self, table):
-		self.table = table
+	pass
 
-	def __iter__(self):
-		for key, data in self.table.items():
-			if self.is_aggregated(data): yield data
+# -----------------------------------------------------------------------------------------------
 
-	@staticmethod
-	def is_aggregated(data):
-		"""Condition: Checks if provided data is Aggregated Interface data
-
-		Args:
-			data (DataFrame): Pandas DataFrame containing `filter` column
-
-		Returns:
-			bool: result of condition
-		"""			
-		return data['filter'].lower() == 'aggregated'
-
-
-class Loopback():
+class Loopback(Common):
 	"""device Loopback/instances
 
 	Args:
@@ -399,27 +320,11 @@ class Loopback():
 	Yields:
 		Loopback: Instance of Loopback
 	"""	
-	def __init__(self, table):
-		self.table = table
+	pass
 
-	def __iter__(self):
-		for key, data in self.table.items():
-			if self.is_loopback(data): yield data
+# -----------------------------------------------------------------------------------------------
 
-	@staticmethod
-	def is_loopback(data):
-		"""Condition: Checks if provided data is Loopback Interface data
-
-		Args:
-			data (DataFrame): Pandas DataFrame containing `filter` column
-
-		Returns:
-			bool: result of condition
-		"""				
-		return data['filter'].lower() == 'loopback'
-
-
-class Static():
+class Static(Common):
 	"""device static
 
 	Args:
@@ -431,27 +336,35 @@ class Static():
 	Yields:
 		Static: Instance of Static
 	"""	
-	def __init__(self, table):
-		self.table = table
 
-	def __iter__(self):
-		for key, data in self.table.items():
-			if self.is_static(data): yield data
+	def version(self, ver):
+		for data in self:
+			if int(data['version']) == ver:
+				yield data
 
-	@staticmethod
-	def is_static(data):
-		"""Condition: Checks if provided data is static data
+	def has_nexthop(self):
+		for data in self:
+			if data['next_hop'] != "":
+				yield data
 
-		Args:
-			data (DataFrame): Pandas DataFrame containing `filter` column
+	def default_route(self, default_route=True):
+		for data in self:
+			if (
+				   ((data['prefix'] == "0.0.0.0/0" or data['prefix'] == "::/0") and default_route)
+				or  (data['prefix'] != "0.0.0.0/0" and data['prefix'] != "::/0" and not default_route)
+				):
+				yield data
 
-		Returns:
-			bool: result of condition
-		"""				
-		return data['filter'].lower() == 'static'
+	def vrf(self, vrf):
+		for data in self:
+			if ((isinstance(vrf, str) and data['pfx_vrf'] == vrf)
+				or (isinstance(vrf, (list, set, tuple)) and data['pfx_vrf'] in vrf)
+				):
+				yield data
 
+# -----------------------------------------------------------------------------------------------
 
-class Ospf():
+class Ospf(Common):
 	"""device Ospf
 
 	Args:
@@ -463,28 +376,20 @@ class Ospf():
 	Yields:
 		Ospf: Instance of Ospf
 	"""	
-	def __init__(self, table):
-		self.table = table
+	def vrf(self, vrf=""):
+		for data in self:
+			if ((isinstance(vrf, str) and data['ospf_vrf'] == vrf)
+				or (isinstance(vrf, (list, set, tuple)) and data['ospf_vrf'] in vrf)
+				):
+				yield data
 
-	def __iter__(self):
-		for key, data in self.table.items():
-			if self.is_ospf(data): yield data
-
-	@staticmethod
-	def is_ospf(data):
-		"""Condition: Checks if provided data is ospf data
-
-		Args:
-			data (DataFrame): Pandas DataFrame containing `filter` column
-
-		Returns:
-			bool: result of condition
-		"""				
-		return data['filter'].lower() == 'ospf'
+	def area_summary_tupples(self):
+		for data in self:
+			for pfx, area in zip(str_to_list(data['summary_prefixes']), str_to_list(data['summary_areas'])):
+				yield area, pfx
 
 
-
-
+# -----------------------------------------------------------------------------------------------
 
 
 def sort(obj):
