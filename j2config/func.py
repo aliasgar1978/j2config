@@ -121,7 +121,7 @@ class Vlan(Common):
 
 	def _sorted_vl_range(self, start, stop):
 		vlans = [ int(data['int_number']) for data in self if start <= int(data['int_number']) < stop ]
-		return vlans	
+		return sorted(vlans)	
 
 	def vlans_sorted_range(self, start, stop):
 		"""yields data slice(s) for the vlans matching for the provided range
