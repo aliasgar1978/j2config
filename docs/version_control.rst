@@ -33,7 +33,17 @@ Version Control
        * Added a hook **ABSRegion** class in order to support it via custom implementation.  
        * Input variable **global_file** for PrepareConfig class changed to **regional_file**.
        * New variable **regional_class** added for PrepareConfig class in order to process custom *regional_class* along with custom *regional_file*.
+   * - 0.1.1
+     - Nov 1, 2023
+     - added **OSPF** and **STATIC ROUTES** filters. 
 
+
+
+.. warning::
+
+  * Updation of this package individually is stopped.
+  * Package is incorporated in ``nettoolkit`` package as a sub-package.
+  * Use nettoolkit for the future updates.
 
 -----
 
